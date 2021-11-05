@@ -9,3 +9,7 @@ A spreadsheet of the tailfin RNA-seq analysis that identified the 274 differenti
 ### aba2084_tables_s1_to_s7.xlsx
 
 Supplemental tables S1 through S7 from Hou 2020. 
+
+### Hartig_gene_list.csv
+
+Add factor column titled `DiffExp` with values [`upregulated`, `downregulated`, `none`] to reflect the highlighting in `Fin_interaction_0dpa_vs_2dpa.xlsx`.
