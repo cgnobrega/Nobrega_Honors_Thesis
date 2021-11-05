@@ -13,3 +13,7 @@ Supplemental tables S1 through S7 from Hou 2020.
 ### Hartig_gene_list.csv
 
 Add factor column titled `DiffExp` with values [`upregulated`, `downregulated`, `none`] to reflect the highlighting in `Fin_interaction_0dpa_vs_2dpa.xlsx`.
+
+### Hou_gene_list.csv
+
+Supplementary Table S2 Genes differentially enriched in major cell types (top 50). 
