@@ -175,6 +175,7 @@ container_image=kallisto_v_latest.sif
 
 ```
 #!/bin/bash
+. /home/ubuntu/.profile
 PRGM='_fastqc_param'
 for FILE in ./jcoffman_007/SL*R1*;
 do
@@ -183,7 +184,7 @@ RIGHT=${FILE:2:23}2.fastq.gz;
 PARAM_NAME=${FILE:15:8}$PRGM.txt;
 OUT=${FILE:15:8};
 
-fastqc_singularity -x ./fastqc_param_files/$PARAM_NAME;
+/compbio/software/compbio_command_scripts/fastqc/fastqc_singularity.sh -x ./fastqc_param_files/$PARAM_NAME;
 
 sed -i -e "s|left_read_file=|left_read_file=$LEFT|" ./fastqc_param_files/$PARAM_NAME;
 sed -i -e "s|right_read_file=|right_read_file=$RIGHT|" ./fastqc_param_files/$PARAM_NAME;
@@ -196,7 +197,7 @@ sed -i -e "s|output_directory=|output_directory=fastqc_out/$OUT|" ./fastqc_param
 # echo "param file name: $PARAM_NAME "
 # echo "out directory: $OUT "
 
-fastqc_singularity -p ./fastqc_param_files/$PARAM_NAME
+/compbio/software/compbio_command_scripts/fastqc/fastqc_singularity.sh -p ./fastqc_param_files/$PARAM_NAME
 done
 ```
 
@@ -212,7 +213,7 @@ RIGHT=${FILE:2:23}2.fastq.gz;
 PARAM_NAME=${FILE:15:8}$PRGM.txt;
 OUT=${FILE:15:8};
 
-trim_galore_singularity -x ./trimgalore_param_files/$PARAM_NAME;
+/compbio/software/compbio_command_scripts/trim_galore/trim_galore_singularity.sh -x ./trimgalore_param_files/$PARAM_NAME;
 
 sed -i -e "s|left_read_file=|left_read_file=$LEFT|" ./trimgalore_param_files/$PARAM_NAME;
 sed -i -e "s|right_read_file=|right_read_file=$RIGHT|" ./trimgalore_param_files/$PARAM_NAME;
@@ -227,7 +228,7 @@ sed -i -e "s|trim_galore_v_latest.sif|trimgalore_v_latest.sif|" ./trimgalore_par
 # echo "param file name: $PARAM_NAME "
 # echo "out directory: $OUT "
 
-trim_galore_singularity -p ./trimgalore_param_files/$PARAM_NAME
+/compbio/software/compbio_command_scripts/trim_galore/trim_galore_singularity.sh -p ./trimgalore_param_files/$PARAM_NAME
 done
 ```
 
@@ -243,7 +244,7 @@ RIGHT=${FILE:2:23}2.fastq.gz;
 PARAM_NAME=${FILE:15:8}$PRGM.txt;
 OUT=${FILE:15:8};
 
-kallisto_quant_singularity -x ./kallisto_quant_param_files/$PARAM_NAME;
+/compbio/software/compbio_command_scripts/kallisto/kallisto_quant_singularity.sh -x ./kallisto_quant_param_files/$PARAM_NAME;
 
 sed -i -e "s|left_read_file=|left_read_file=$LEFT|" ./kallisto_quant_param_files/$PARAM_NAME;
 sed -i -e "s|right_read_file=|right_read_file=$RIGHT|" ./kallisto_quant_param_files/$PARAM_NAME;
@@ -260,7 +261,7 @@ sed -i -e "s|threads=|threads=8|" ./kallisto_quant_param_files/$PARAM_NAME;
 # echo "param file name: $PARAM_NAME "
 # echo "out directory: $OUT "
 
-kallisto_quant_singularity -p ./kallisto_quant_param_files/$PARAM_NAME
+/compbio/software/compbio_command_scripts/kallisto/kallisto_quant_singularity.sh -p ./kallisto_quant_param_files/$PARAM_NAME
 done
 ```
 
