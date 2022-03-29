@@ -167,7 +167,58 @@ container_image=kallisto_v_latest.sif
 * note `kallisto_index`
 
 ## Tximport
-* coming soon
+  * `tximport` needs transcript to gene map so it can make both a transcript 
+    and gene count matrix
+  * there already exists one, but it has only transcript id without 
+    version number which will mismatch with `kallisto` output and make 
+    `tximport` fail.
+  * so before running `tximport` we need to remake the tx2gene file based 
+    the gtf file. The steps for how this was done are below:
+    
+### tx2gene file
+  * `.gtf` file has 9 columns. The 3rd column describes the entry type, and the 
+    9th column has all the information (attributes) about the entry in a semi-colon
+    delimited list. We are only interested in rows where the 3rd column says "trasncript"
+  * the final tx2gene file will be a text file with two columns tab delimited where the 
+    first column is the `gene_id` and the second column is the `transcript_id` with the 
+    `transcript_version`.
+  * the first step is to take all the rows from the `.gtf` file that are transcripts. This 
+    was done with the following code:
+    ```
+     grep -v "#" ensembl_91_zebrafish/Danio_rerio.GRCz10.91.gtf | cut -f 3,9 | awk '{ if($1 == "transcript") print $0;}' > transcripts_Danio_rerio.GRCz10.91.txt
+    ```
+  * this puts all the transcript entries into a file called `transcripts_Danio_rerio.GRCz10.91.txt`
+    with only rows 3 and 9 (the rows we are interested in)
+  * next, to create the final tx2gene file, the following bash script was used:
+    ```
+    #!/bin/bash
+    . /home/ubuntu/.profile
+    touch v_Danio_rerio.GRCz10.91.tx2gene.txt
+    
+    while IFS= read -r line
+    do
+    ATR="$(echo $line | cut -f2)"
+    GENE_ID="$(echo $ATR | cut -d ';' -f1 | grep -o '".*"' | sed 's/"//g')"
+    TX_ID="$(echo $ATR | cut -d ';' -f3 | grep -o '".*"' | sed 's/"//g')"
+    TX_V="$(echo $ATR | cut -d ';' -f4 | grep -o '".*"' | sed 's/"//g')"
+    TX_F="$TX_ID.$TX_V"
+    echo -e $GENE_ID'\t'$TX_F >> v_Danio_rerio.GRCz10.91.tx2gene.txt
+    done < transcripts_Danio_rerio.GRCz10.91.txt
+    ```
+  * this generated the file `v_Danio_rerio.GRCz10.91.tx2gene.txt` which is the 
+    final tx2gene file. Here is the first 10 lines:
+    ```
+    ENSDARG00000104632      ENSDART00000166186.2
+    ENSDARG00000100660      ENSDART00000166174.2
+    ENSDARG00000098417      ENSDART00000157825.1
+    ENSDARG00000100422      ENSDART00000172566.1
+    ENSDARG00000100422      ENSDART00000169187.1
+    ENSDARG00000100422      ENSDART00000169667.2
+    ENSDARG00000102128      ENSDART00000167290.2
+    ENSDARG00000102128      ENSDART00000169805.1
+    ENSDARG00000102128      ENSDART00000158376.2
+    ENSDARG00000102128      ENSDART00000179581.1
+    ```
 
 # Param file scripts 
 
