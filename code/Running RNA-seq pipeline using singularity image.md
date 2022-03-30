@@ -78,7 +78,8 @@ cat /compbio/software/compbio_command_scripts/fastqc/fastqc_singularity.sh
 2. `trimgalore` goes next. Will run `cutadapt` first and `fastqc` again. 18 param files
 3. `kallisto_index` goes only **once**.
 *:question: we ran it during demo meeting, that should mean I'm all set?*
-5. `kallisto_quant` 18 param files, see below for param file notes 
+5. `kallisto_quant` 18 param files, see below for param file notes
+6. `tximport` 
 
 # Param files contd. 
 
@@ -167,21 +168,62 @@ container_image=kallisto_v_latest.sif
 * note `kallisto_index`
 
 ## Tximport
-  * `tximport` needs transcript to gene map so it can make both a transcript 
+* `tximport` needs transcript to gene map so it can make both a transcript 
     and gene count matrix
-  * there already exists one, but it has only transcript id without 
-    version number which will mismatch with `kallisto` output and make 
-    `tximport` fail.
-  * so before running `tximport` we need to remake the tx2gene file based 
-    the gtf file. The steps for how this was done are below:
+* there already exists one, but it has only transcript id without 
+  version number which will mismatch with `kallisto` output and make 
+  `tximport` fail.
+* so before running `tximport` we need to remake the tx2gene file based 
+  the gtf file. The steps for how this was done are below.
+* once the tx2gene file was made, `tximport` was run using an Rscript called
+  `kallisto_tximport_to_genes.R`
+    ```
+    library(tximport)
+    
+    #print out the system/R configuration
+    sessionInfo()
+    
+    #define local variables
+    design_file <- "/home/ubuntu/Danio_rerio_design.csv"
+    baseDir <- "/home/ubuntu/kallisto_quant_out/"
+    tx2gene_file <- "/home/ubuntu/v_Danio_rerio.GRCz10.91.tx2gene.txt"
+    output_file_prefix <- "Danio_rerio.GRCz10.91"
+    
+    #read in the design file.  the directory labels MUST have column header "sample"
+    samples <- read.table(design_file,header=TRUE)
+    samples
+    files <- file.path(baseDir,samples$sample,"abundance.h5")
+    files
+    names(files) <- samples$sample
+    
+    tx2gene <- read.table(tx2gene_file)
+    summary(tx2gene)
+    txi <- tximport(files, type="kallisto", tx2gene=tx2gene)
+    summary(txi)
+    
+    write.table(as.table(txi$counts),paste(output_file_prefix,'.gene.counts.txt',sep=""),sep='\t',col.names=NA,row.names=TRUE,quote=FALSE)
+    write.table(as.table(txi$abundance),paste(output_file_prefix,'.gene.tpm.txt',sep=""),sep='\t',col.names=NA,row.names=TRUE,quote=FALSE)
+    
+    txit <- tximport(files, type="kallisto", txOut=TRUE)
+    summary(txit)
+    write.table(as.table(txit$counts),paste(output_file_prefix,'.transcript.counts.txt',sep=""),sep='\t',col.names=NA,row.names=TRUE,quote=FALSE)
+    write.table(as.table(txit$abundance),paste(output_file_prefix,'.transcript.tpm.txt',sep=""),sep='\t',col.names=NA,row.names=TRUE,quote=FALSE)
+    ```
+* This Rscript resulted in the following files: 
+    ```
+    Danio_rerio.GRCz10.91.gene.counts.txt        
+    Danio_rerio.GRCz10.91.gene.tpm.txt           
+    Danio_rerio.GRCz10.91.transcript.counts.txt  
+    Danio_rerio.GRCz10.91.transcript.tpm.txt
+    ```
     
 ### tx2gene file
   * `.gtf` file has 9 columns. The 3rd column describes the entry type, and the 
     9th column has all the information (attributes) about the entry in a semi-colon
     delimited list. We are only interested in rows where the 3rd column says "trasncript"
   * the final tx2gene file will be a text file with two columns tab delimited where the 
-    first column is the `gene_id` and the second column is the `transcript_id` with the 
-    `transcript_version`.
+    first column is the `transcript_id` with the `transcript_version` and the second column 
+    is the `gene_id`.
   * the first step is to take all the rows from the `.gtf` file that are transcripts. This 
     was done with the following code:
     ```
@@ -202,22 +244,22 @@ container_image=kallisto_v_latest.sif
     TX_ID="$(echo $ATR | cut -d ';' -f3 | grep -o '".*"' | sed 's/"//g')"
     TX_V="$(echo $ATR | cut -d ';' -f4 | grep -o '".*"' | sed 's/"//g')"
     TX_F="$TX_ID.$TX_V"
-    echo -e $GENE_ID'\t'$TX_F >> v_Danio_rerio.GRCz10.91.tx2gene.txt
+    echo -e $TX_F'\t'$GENE_ID >> v_Danio_rerio.GRCz10.91.tx2gene.txt
     done < transcripts_Danio_rerio.GRCz10.91.txt
     ```
   * this generated the file `v_Danio_rerio.GRCz10.91.tx2gene.txt` which is the 
     final tx2gene file. Here is the first 10 lines:
     ```
-    ENSDARG00000104632      ENSDART00000166186.2
-    ENSDARG00000100660      ENSDART00000166174.2
-    ENSDARG00000098417      ENSDART00000157825.1
-    ENSDARG00000100422      ENSDART00000172566.1
-    ENSDARG00000100422      ENSDART00000169187.1
-    ENSDARG00000100422      ENSDART00000169667.2
-    ENSDARG00000102128      ENSDART00000167290.2
-    ENSDARG00000102128      ENSDART00000169805.1
-    ENSDARG00000102128      ENSDART00000158376.2
-    ENSDARG00000102128      ENSDART00000179581.1
+    ENSDART00000166186.2    ENSDARG00000104632
+    ENSDART00000166174.2    ENSDARG00000100660
+    ENSDART00000157825.1    ENSDARG00000098417
+    ENSDART00000172566.1    ENSDARG00000100422
+    ENSDART00000169187.1    ENSDARG00000100422
+    ENSDART00000169667.2    ENSDARG00000100422
+    ENSDART00000167290.2    ENSDARG00000102128
+    ENSDART00000169805.1    ENSDARG00000102128
+    ENSDART00000158376.2    ENSDARG00000102128
+    ENSDART00000179581.1    ENSDARG00000102128
     ```
 
 # Param file scripts 
