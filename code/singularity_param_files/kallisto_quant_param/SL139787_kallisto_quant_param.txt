@@ -1,0 +1,15 @@
+left_read_file=trimgalore_out/SL139787/SL139787_R1_val_1.fq.gz
+right_read_file=trimgalore_out/SL139787/SL139787_R2_val_2.fq.gz	#Required if reads are paired-end
+output_directory=kallisto_quant_out/SL139787
+kallisto_index=kallisto_index/ensembl_91_zebrafish		#Filename for the kallisto index constructed with kallisto index
+threads=8
+root_working_directory=/compbio
+
+#------------------------------------------------------------------- #
+# DO NOT MODIFY PARAMETERS BELOW UNLESS YOU KNOW WHAT YOU ARE DOING! #
+#------------------------------------------------------------------- #
+
+kallisto_options=""
+kallisto_flags=""
+
+container_image=kallisto_v_latest.sif

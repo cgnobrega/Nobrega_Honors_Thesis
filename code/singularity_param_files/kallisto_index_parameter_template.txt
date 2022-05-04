@@ -1,0 +1,13 @@
+input_file=ensembl_91_zebrafish/danio_rerio-joined.fa
+output_directory=kallisto_index	#This directory must exist. Kallisto will not create it.
+index=ensembl_91_zebrafish	#Filename for the kallisto index to be constructed
+root_working_directory=/compbio
+
+#------------------------------------------------------------------- #
+# DO NOT MODIFY PARAMETERS BELOW UNLESS YOU KNOW WHAT YOU ARE DOING! #
+#------------------------------------------------------------------- #
+
+kallisto_options="--kmer-size=25"
+kallisto_flags=""
+
+container_image=kallisto_v_latest.sif

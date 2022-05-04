@@ -1,0 +1,13 @@
+left_read_file=jcoffman_007/SL139778_R1.fastq.gz
+right_read_file=jcoffman_007/SL139778_R2.fastq.gz	#This parameter is only required if samples are paired-end.
+output_directory=fastqc_out/SL139778
+root_working_directory=/compbio
+
+#------------------------------------------------------------------- #
+# DO NOT MODIFY PARAMETERS BELOW UNLESS YOU KNOW WHAT YOU ARE DOING! #
+#------------------------------------------------------------------- #
+
+fastqc_options=""
+fastqc_flags=""
+
+container_image=fastqc_v_latest.sif
