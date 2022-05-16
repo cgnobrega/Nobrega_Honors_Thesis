@@ -1,5 +1,40 @@
 # Data
 
+```
+data
+│   README.md
+│   Danio_rerio.GRCz10.91.gene.counts.txt
+│   Hartig_0dpa_ctrl_vs_treated.csv
+│   Hartig_0dpa_vs_2dpa_ctrl.csv
+│   Hartig_0dpa_vs_2dpa_interaction.csv
+│   Hartig_0dpa_vs_2dpa_treated.csv
+│   Hartig_2dpa_ctrl_vs_treated.csv
+│   Hartig_4dpa_ctrl_vs_treated.csv
+│   Hou_gene_list_full.csv
+│   Hou_gene_list_top50.csv
+└───Hartig_Fin_Data_raw/
+│   │   Fin_0dpa_CTRL_vs_0dpa_Treated.xlsx
+│   │   Fin_0dpa_CTRL_vs_2dpa_CTRL.xlsx
+│   │   Fin_0dpa_TREATED_vs_2dpa_TREATED.xlsx
+│   │   Fin_2dpa_CTRL_vs_2dpa_Treated.xlsx
+│   │   Fin_4dpa_CTRL_vs_4dpa_Treated.xlsx
+│   │   Fin_interaction_0dpa_vs_2dpa.xlsx
+└───Hou_Data_raw
+│   │   GSE137971_cells.csv
+│   │   SupplementaryTableS2.xlsx
+│   │   aba2084_tables_s1_to_s7.xlsx
+└───RNASieve_input_2dpa
+│   │   bulk_count_2dpa.csv.gz
+│   │   bulk_design_2dpa.csv.gz
+│   │   single_count_2dpa.csv.gz
+│   │   single_design_2dpa.csv.gz
+└───RNASieve_output
+│   │   rnasieve_jcoffman007.csv
+│   │   rnasieve_jcoffman007_0dpa.csv
+│   │   rnasieve_jcoffman007_2dpa.csv
+│   │   rnasieve_jcoffman007_4dpa.csv
+```
+
 Preliminary data storage
 
 ### Hartig_Fine_Data_raw

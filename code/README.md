@@ -1,5 +1,42 @@
 # Code
 
+```
+code
+│   README.md
+│   Running RNA-seq pipeline using singularity image.md    
+│   gene_lists_parse.ipynb
+│   matrix_cleaning.ipynb
+│   set_matching.ipynb
+│   subsetting_matrices.ipynb
+│   all_box_plots.png
+│   all_std_mad_plots.png
+│   all_violin_plots.png
+└───RNASieve_scripts
+│   │   rnasieve_jcoffman007_0dpa.ipynb
+│   │   rnasieve_jcoffman007_2dpa.ipynb
+│   │   rnasieve_jcoffman007_4dpa.ipynb
+│   │   rnasieve_jcoffman007.ipynb
+└───singularity_param_files
+│   │   kallisto_index_parameter_template.txt
+│   │   kallisto_tximport_to_genes.R
+│   │   v_Danio_rerio.GRCz10.91.tx2gene.txt
+│   └───fastqc_param
+│   │   │  # param files for each bulk sample
+│   └───trimgalore_param
+│   │   │  # param files for each bulk sample
+│   └───kallisto_quant_param
+│   │   │  # param files for each bulk sample
+└───boxplot
+│   │   # 6 boxplot .png files
+└───violin_plot
+│   │   # 6 violin plot .png files
+└───std_mad_barplot
+│   │   # 6 bar plot .png files
+└───summary_tables
+│   │   # 6 data table .png files
+
+```
+
 ### Boxplot
 
 Box plots for each of the samples grouped by cell type 
